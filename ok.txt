@@ -1,0 +1,104 @@
+convolution (continuous)
+t=-10:0.01:10;
+a=exp(-t);
+b=heaviside(t);
+c=conv(a,b,'same');
+figure(1),subplot(3,1,1),plot(t,a);grid on;
+subplot(3,1,2),plot(t,b);grid on;
+subplot(3,1,3),plot(t,c);grid on;
+
+convolution (discrete)
+a=[1,2,3];
+b=[3,4,5];
+c=conv(a,b,'same');
+figure(1),subplot(3,1,1),stem(a);grid on;
+subplot(3,1,2),stem(b);grid on;
+subplot(3,1,3),stem(b);grid on;
+
+z transform
+syms n ;
+a=heaviside(n);
+z=ztrans(a,n);
+disp(z)
+
+discrete fourier transform
+x=[1 2 3 4];
+N=length(x);
+for i=1:N
+y(i)=0;
+for j=1:N
+y(i)=y(i)+x(j).*exp(-2*1i*(pi/N)*(i-1)*(j-1));
+end
+disp (y)
+end
+
+discrete time fourier transform
+x=[1 2 3 4];
+l=length(x);
+w=linspace(-10,10,21);
+dtft=zeros(1,length(w));
+for j=1:length(w)
+for k=0:l-1
+dtft(j)=dtft(j)+x(k+1).*exp(-1i*w(j)*k);
+end
+end
+figure;
+plot(w, abs(dtft));
+grid on;
+
+fourier transform
+
+syms t;
+a=input('Enter value of a:');
+x1=exp(-abs(t));
+x2=fourier(x1);
+xr=real(x2);
+xi=imag(x2);
+m=sqrt(xr^2+xi^2);
+ezplot(m);
+
+time variance
+
+n=1:9;
+k=input('Enter delay:');
+x=[1 2 3 4 5 6 7 8 9];
+x1=[zeros(1,k) x];
+n1=1:(length(n)+k)
+y1=n1.*x1(1);
+y2=n.*x;
+y3=[zeros(1,k) y2];
+if isequal(round(y1),round(y3))
+disp('Signal is Time invariant');
+else
+disp('Signal is time variant');
+end
+
+linearity
+
+n=0:40;
+w1=0.2;
+w2=0.2;
+x1=cos(w1*n);
+x2=cos(2*w2*n);
+a1=input('Enter a1:');
+a2=input('Enter a2:');
+y1=n.*x1;
+y2=n.*x2;
+y = a1*y1 + a2*y2;
+x3=(a1*x1)+(a2*x2);
+y3=n.*x3;
+y4=x1.^2;
+y5=x2.^2;
+y6=(a1*y4)+(a2*y5);
+x4=x1+x2;
+y7=x4.^2;
+if isequal(round(y),round(y3))
+disp('n.x(n) is Linear');
+else
+disp('n.x(n) is Non-Linear');
+end
+if isequal(round(y6),round(y7))
+disp('x^2 is Linear')
+else
+disp('x^2 is non-linear')
+end
